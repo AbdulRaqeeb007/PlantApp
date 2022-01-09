@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, override_on_non_overriding_member, unused_import
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, override_on_non_overriding_member, unused_import, non_constant_identifier_names
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +13,10 @@ import 'package:plant_app/screen/signin/signscreen.dart';
 import 'textfiel_input.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-cloud_store(String user, email) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  firestore.collection("user").add({'Name': user, "Email": email});
-}
+// cloud_store(String user, email) {
+//   FirebaseFirestore firestore = FirebaseFirestore.instance;
+//   firestore.collection("user").add({'Name': user, "Email": email});
+// }
 
 class SignUp extends StatelessWidget {
   @override
@@ -62,8 +62,6 @@ class SignUp extends StatelessWidget {
               .createUserWithEmailAndPassword(
                   email: email, password: conf_password);
           User? user = FirebaseAuth.instance.currentUser;
-
-          user != null;
 
           if (user != null && !user.emailVerified) {
             await user.sendEmailVerification();

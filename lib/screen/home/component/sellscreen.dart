@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -227,12 +228,26 @@ class Sell extends StatelessWidget {
 }
 
 Future image_pick() async {
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+  firebase_storage.Reference ref =
+      firebase_storage.FirebaseStorage.instance.ref('/notes.txt');
   final ImagePicker pick = ImagePicker();
-  final XFile? Image = await pick.pickImage(source: ImageSource.gallery);
+  final images = await pick.pickImage(source: ImageSource.gallery);
 
   // final List<XFile>? images = await pick.pickMultiImage();
-
-  print(Image?.path);
-  String file = "'${Image?.path}'";
+  File file = File(images!.path);
   print(file);
+  print(images.path);
+  try {
+    await firebase_storage.FirebaseStorage.instance
+        .ref('uploads/file-to-upload.png')
+        .putFile(file);
+
+    print("upload successful");
+  } catch (e) {
+    print(e);
+    // e.g, e.code == 'canceled'
+  }
+//
 }

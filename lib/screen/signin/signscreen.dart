@@ -40,24 +40,25 @@ class SignIn extends StatelessWidget {
     }
 
     signin() async {
-      final String email = email_cont.text;
-      final String password = password_cont.text;
+      String email = email_cont.text;
+      String password = password_cont.text;
 
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-        User? user = FirebaseAuth.instance.currentUser;
-        if (user != null && user.emailVerified) {
-          print("user${user}");
-          print("user.emailVerified${user.emailVerified}");
-          Get.to(HomeScreen());
-        }
+        Get.to(HomeScreen());
+        // User? user = FirebaseAuth.instance.currentUser;
+        // if (user != null && user.emailVerified) {
+        //   print("user${user}");
+        //   print("user.emailVerified${user.emailVerified}");
+        //   Get.to(HomeScreen());
+        // }
 
-        if (user != null && !user.emailVerified) {
-          await user.sendEmailVerification();
+        // if (user != null && !user.emailVerified) {
+        //   await user.sendEmailVerification();
 
-          DialogBox("varify", "please verify email", Icons.verified);
-        }
+        //   DialogBox("varify", "please verify email", Icons.verified);
+        // }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print('No user found for that email.');
@@ -139,9 +140,7 @@ class SignIn extends StatelessWidget {
                         child: ElevatedButton(
                           style: OutlinedButton.styleFrom(
                               backgroundColor: kBackgroundColor),
-                          onPressed: () {
-                            Get.to(HomeScreen());
-                          },
+                          onPressed: signin,
                           child: Container(
                               padding: EdgeInsets.all(5),
                               height: 40,
