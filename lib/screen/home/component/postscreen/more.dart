@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/default_transitions.dart';
 import 'package:plant_app/constants.dart';
+import 'package:plant_app/screen/home/component/postscreen/postplantcard.dart';
+
+import '../recommendedplants.dart';
 
 class UserInformation extends StatefulWidget {
   @override
@@ -46,10 +49,14 @@ class _UserInformationState extends State<UserInformation> {
               print(data1[1]['title']);
 
               return GridView.count(
-                  crossAxisCount: 2,
+                  crossAxisCount: 2, // use for maange columns
                   children: List.generate(data1.length, (index) {
-                    return Container(
-                      child: Text(data1[index]['title']),
+                    return PostPlantCard(
+                      title: '',
+                      country: '',
+                      image: '',
+                      price: '',
+                      detail: "null  ",
                     );
                     // return Container(
                     //   color: Colors.green,
