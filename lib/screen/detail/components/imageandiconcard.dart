@@ -35,7 +35,7 @@ class ImageAndIconCard extends StatelessWidget {
                 ),
                 Spacer(),
                 Container(
-                  margin: EdgeInsets.only(bottom: kDefaultPadding * 3),
+                  margin: EdgeInsets.only(bottom: kDefaultPadding),
                   child: Column(
                     children: [
                       IconCard(
@@ -69,9 +69,9 @@ class ImageAndIconCard extends StatelessWidget {
                         topLeft: Radius.circular(40),
                         bottomLeft: Radius.circular(40)),
                     image: DecorationImage(
-                        alignment: Alignment.centerLeft,
-                        fit: BoxFit.cover,
-                        image: NetworkImage(image))))
+                        alignment: Alignment.center,
+                        fit: BoxFit.contain,
+                        image: AssetImage(image))))
           ],
         ),
       ),

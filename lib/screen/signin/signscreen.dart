@@ -1,4 +1,6 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, override_on_non_overriding_member, unused_import
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, override_on_non_overriding_member, unused_import, avoid_print
+
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,10 +11,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:plant_app/screen/signin/cloud.dart';
 import 'package:plant_app/screen/signin/signup.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
   @override
   FirebaseAuth auth = FirebaseAuth.instance;
+
   TextEditingController email_cont = TextEditingController();
+
   TextEditingController password_cont = TextEditingController();
 
   Widget build(BuildContext context) {
@@ -42,23 +51,25 @@ class SignIn extends StatelessWidget {
     signin() async {
       String email = email_cont.text;
       String password = password_cont.text;
+      print(email);
+      print(password);
 
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-        Get.to(HomeScreen());
-        // User? user = FirebaseAuth.instance.currentUser;
-        // if (user != null && user.emailVerified) {
-        //   print("user${user}");
-        //   print("user.emailVerified${user.emailVerified}");
-        //   Get.to(HomeScreen());
-        // }
+        print("succesfull");
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null && user.emailVerified) {
+          print("user${user}");
+          print("user.emailVerified${user.emailVerified}");
+          Get.to(HomeScreen());
+        }
 
-        // if (user != null && !user.emailVerified) {
-        //   await user.sendEmailVerification();
+        if (user != null && !user.emailVerified) {
+          await user.sendEmailVerification();
 
-        //   DialogBox("varify", "please verify email", Icons.verified);
-        // }
+          DialogBox("varify", "please verify email", Icons.verified);
+        }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print('No user found for that email.');
@@ -99,7 +110,7 @@ class SignIn extends StatelessWidget {
                         child: Text(
                           "Plant App",
                           style: TextStyle(
-                              fontSize: 50,
+                              fontSize: MediaQuery.of(context).size.width / 10,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
@@ -140,7 +151,9 @@ class SignIn extends StatelessWidget {
                         child: ElevatedButton(
                           style: OutlinedButton.styleFrom(
                               backgroundColor: kBackgroundColor),
-                          onPressed: signin,
+                          onPressed: () {
+                            Get.to(HomeScreen());
+                          },
                           child: Container(
                               padding: EdgeInsets.all(5),
                               height: 40,
@@ -161,7 +174,9 @@ class SignIn extends StatelessWidget {
                             Text(
                               "Dont Have Account?",
                               style: TextStyle(
-                                  fontSize: 20, color: kBackgroundColor),
+                                  fontSize:
+                                      MediaQuery.of(context).size.width / 20,
+                                  color: kBackgroundColor),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -169,7 +184,10 @@ class SignIn extends StatelessWidget {
                               },
                               child: Text("SignUP",
                                   style: TextStyle(
-                                      fontSize: 30, color: kBackgroundColor)),
+                                      fontSize:
+                                          MediaQuery.of(context).size.width /
+                                              15,
+                                      color: kBackgroundColor)),
                             ),
                           ],
                         ),

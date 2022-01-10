@@ -95,7 +95,6 @@ class SignUp extends StatelessWidget {
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
-        height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: kPrimaryColor,
         child: Column(
@@ -113,7 +112,7 @@ class SignUp extends StatelessWidget {
                         child: Text(
                           "Plant App",
                           style: TextStyle(
-                              fontSize: 50,
+                              fontSize: MediaQuery.of(context).size.width / 10,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
@@ -168,13 +167,13 @@ class SignUp extends StatelessWidget {
                               width: 80,
                               color: kPrimaryColor,
                               child: Text(
-                                "Sign Un",
-                                style: TextStyle(fontSize: 20),
+                                "Sign Up",
+                                style: TextStyle(fontSize: 15),
                               )),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 35),
+                        margin: EdgeInsets.only(top: 35, bottom: 40),
                         padding:
                             EdgeInsets.symmetric(horizontal: kDefaultPadding),
                         child: Column(
@@ -184,7 +183,10 @@ class SignUp extends StatelessWidget {
                                 Text(
                                   "Have Account?",
                                   style: TextStyle(
-                                      fontSize: 20, color: kBackgroundColor),
+                                      fontSize:
+                                          MediaQuery.of(context).size.width /
+                                              20,
+                                      color: kBackgroundColor),
                                 ),
                                 GestureDetector(
                                   onTap: () {
@@ -192,7 +194,10 @@ class SignUp extends StatelessWidget {
                                   },
                                   child: Text("SignIn",
                                       style: TextStyle(
-                                          fontSize: 30,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              15,
                                           color: kBackgroundColor)),
                                 ),
                               ],
@@ -202,7 +207,10 @@ class SignUp extends StatelessWidget {
                                 Text(
                                   "SignUp With",
                                   style: TextStyle(
-                                      fontSize: 20, color: kBackgroundColor),
+                                      fontSize:
+                                          MediaQuery.of(context).size.width /
+                                              20,
+                                      color: kBackgroundColor),
                                 ),
                                 GestureDetector(
                                   onTap: () {
@@ -231,7 +239,10 @@ class SignUp extends StatelessWidget {
                                   },
                                   child: Text("Google",
                                       style: TextStyle(
-                                          fontSize: 30,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              15,
                                           color: kBackgroundColor)),
                                 ),
                               ],

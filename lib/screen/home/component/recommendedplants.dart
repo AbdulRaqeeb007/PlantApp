@@ -19,19 +19,19 @@ class RecommendedPlants extends StatelessWidget {
             country: "Pakistan",
             title: "Rose",
             image: "assets/images/image_2.png",
-            price: 33,
+            price: "33",
           ),
           RecommandedPlantCard(
             country: "Pakistan",
             title: "jasmin",
             image: "assets/images/image_3.png",
-            price: 133,
+            price: "133",
           ),
           RecommandedPlantCard(
             country: "Pakistan",
             title: "Flower",
             image: "assets/images/image_1.png",
-            price: 233,
+            price: "233",
           ),
           // ListView.builder(
           //   itemCount: 5,
@@ -60,12 +60,13 @@ class RecommandedPlantCard extends StatelessWidget {
     required this.price,
   }) : super(key: key);
   final String image, title, country;
-  final int price;
+  final String price;
 
   @override
   Widget build(BuildContext context) {
     press() {
-      Get.to(DetailScreen());
+      Get.to(DetailScreen(
+          title: title, country: country, price: price, image: image));
     }
 
     Size size = MediaQuery.of(context).size;

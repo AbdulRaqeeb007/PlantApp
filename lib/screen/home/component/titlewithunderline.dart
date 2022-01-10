@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:plant_app/screen/home/component/postscreen/more.dart';
 
 import '../../../constants.dart';
 
@@ -15,10 +18,6 @@ class TitleWithMoreBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    pres() {
-      press;
-    }
-
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Padding(
@@ -28,7 +27,9 @@ class TitleWithMoreBtn extends StatelessWidget {
             TitleWithCustomUnderline(text: title),
             Spacer(),
             ElevatedButton(
-              onPressed: pres,
+              onPressed: () {
+                Get.to(UserInformation());
+              },
               child: Text(text),
               style: OutlinedButton.styleFrom(
                 backgroundColor: kPrimaryColor,

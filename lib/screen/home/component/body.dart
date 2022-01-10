@@ -4,7 +4,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:plant_app/constants.dart';
+import 'package:plant_app/screen/home/component/postscreen/more.dart';
 
 import 'featureplant.dart';
 import 'headerwithsearchbox.dart';
@@ -24,8 +26,8 @@ class Body extends StatelessWidget {
           HeaderWithSearchBar(size: size),
           TitleWithMoreBtn(
             title: 'Recommended',
-            press: () {},
             text: 'More',
+            press: () {},
           ),
           RecommendedPlants(),
           TitleWithMoreBtn(title: "Featured", press: () {}, text: "More"),

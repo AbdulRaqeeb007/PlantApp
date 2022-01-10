@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, override_on_non_overriding_member, unused_import, avoid_print
 
 import 'dart:io';
+import 'package:path/path.dart' as path;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
@@ -16,14 +17,24 @@ import 'package:plant_app/screen/signin/cloud.dart';
 import 'package:plant_app/screen/signin/signscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:plant_app/screen/signin/textfiel_input.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-class Sell extends StatelessWidget {
+class Sell extends StatefulWidget {
+  @override
+  State<Sell> createState() => _SellState();
+}
+
+class _SellState extends State<Sell> {
+  late String urls;
   @override
   FirebaseAuth auth = FirebaseAuth.instance;
+
   TextEditingController Title_cont = TextEditingController();
 
   TextEditingController Detail_cont = TextEditingController();
+
   TextEditingController Price_cont = TextEditingController();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Widget build(BuildContext context) {
     DialogBox(final String title, final String message, final icon) {
@@ -49,56 +60,62 @@ class Sell extends StatelessWidget {
               ));
     }
 
-    // signup() async {
-    //   final String email = Title_cont.text;
-    //   final String password = Detail_cont.text;
-    //   final String conf_password = Price_cont.text;
-    //   if (conf_password == password) {
-    //     try {
-    //       UserCredential userCredential = await FirebaseAuth.instance
-    //           .createUserWithEmailAndPassword(
-    //               email: email, password: conf_password);
-    //       User? user = FirebaseAuth.instance.currentUser;
+    Future image_pick() async {
+      firebase_storage.FirebaseStorage storage =
+          firebase_storage.FirebaseStorage.instance;
+      firebase_storage.Reference ref =
+          firebase_storage.FirebaseStorage.instance.ref('/notes.txt');
+      final ImagePicker pick = ImagePicker();
+      final images = await pick.pickImage(source: ImageSource.gallery);
 
-    //       user != null;
+      // final List<XFile>? images = await pick.pickMultiImage();
+      File file = File(images!.path);
+      print(file);
+      print(images.path);
+      String basename = path.basename(images.path);
 
-    //       if (user != null && !user.emailVerified) {
-    //         await user.sendEmailVerification();
-    //         print("varify email${user.emailVerified}");
-    //         Get.to(SignIn());
-    //       }
-    //     } on FirebaseAuthException catch (e) {
-    //       if (e.code == 'weak-password') {
-    //         print('The password provided is too weak.');
-    //         DialogBox("password", "The password provided is too weak",
-    //             Icons.password);
-    //       } else if (e.code == 'email-already-in-use') {
-    //         print('The account already exists for that email');
-    //         DialogBox("email", "The account already exists for that email",
-    //             Icons.email);
-    //         // email_cont.clear();
-    //         // password_cont.clear();
-    //         // conf_password_cont.clear();
-    //       }
-    //     } catch (e) {
-    //       print(e);
-    //     }
-    //   } else {
-    //     DialogBox("Password", "Confirm Password Not Match", Icons.password);
-    //     // password_cont.clear();
-    //     // conf_password_cont.clear();
-    //   }
-    // }
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+      try {
+        firebase_storage.Reference ref =
+            firebase_storage.FirebaseStorage.instance.ref(basename);
+        await ref.putFile(file);
+
+        // if (await ref.putFile(file) =='TaskState.success') {
+        //   DialogBox("Upload", "Image Are Uploding", Icons.upload);
+        // }
+        String url = await ref.getDownloadURL();
+
+        print("upload successful");
+        print(url);
+        setState(() {
+          urls = url;
+        });
+      } catch (e) {
+        print(e);
+        // e.g, e.code == 'canceled'
+      }
+//
+    }
 
     Future<void> sell() async {
       final String Title = Title_cont.text;
       final String Detail = Detail_cont.text;
       final String Price = Price_cont.text;
-      await firestore
-          .collection("user")
-          .doc()
-          .set({'title': Title, "description": Detail, "price": Price});
+      User? user = FirebaseAuth.instance.currentUser;
+      final a = user;
+      print(a?.uid);
+      try {
+        await firestore.collection("Post").doc().set({
+          "email": user?.email,
+          'title': Title,
+          "description": Detail,
+          "price": Price,
+          "image": urls
+        });
+        print("Successfuly Uploaded");
+        Get.to(HomeScreen());
+      } catch (e) {
+        print(e);
+      }
     }
 
     Size size = MediaQuery.of(context).size;
@@ -122,7 +139,8 @@ class Sell extends StatelessWidget {
                           child: Text(
                             "Plant App",
                             style: TextStyle(
-                                fontSize: 50,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 10,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
                           ),
@@ -172,7 +190,8 @@ class Sell extends StatelessWidget {
                               "Add Photo ++",
                               style: TextStyle(
                                   color: kPrimaryColor,
-                                  fontSize: kDefaultPadding,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width / 20,
                                   fontWeight: FontWeight.bold),
                             )),
                       ),
@@ -225,29 +244,4 @@ class Sell extends StatelessWidget {
       ),
     );
   }
-}
-
-Future image_pick() async {
-  firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance;
-  firebase_storage.Reference ref =
-      firebase_storage.FirebaseStorage.instance.ref('/notes.txt');
-  final ImagePicker pick = ImagePicker();
-  final images = await pick.pickImage(source: ImageSource.gallery);
-
-  // final List<XFile>? images = await pick.pickMultiImage();
-  File file = File(images!.path);
-  print(file);
-  print(images.path);
-  try {
-    await firebase_storage.FirebaseStorage.instance
-        .ref('uploads/file-to-upload.png')
-        .putFile(file);
-
-    print("upload successful");
-  } catch (e) {
-    print(e);
-    // e.g, e.code == 'canceled'
-  }
-//
 }
